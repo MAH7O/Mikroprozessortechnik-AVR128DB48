@@ -24,8 +24,5 @@ The exercises are organized chronologically and by topic:
 - **Programming Languages**: Assembly, C
 - **IDE/Tools**: Microchip Studio, VS Code, PlatformIO (as applicable)
 
-## 📜 Documentation
-For detailed assignment instructions, refer to the included [Assignment PDF](./0a00dd9d-51eb-4ebf-bbd4-4da074dbdc69.pdf).
-
 ---
 *Developed as part of the Mikroprozessortechnik Module.*
