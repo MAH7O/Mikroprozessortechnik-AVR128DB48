@@ -1,0 +1,36 @@
+MOV A, 232 ; OUTPUT LEFT
+MOV B, 233 ; OUTPUT RIGHT
+MOV C, 0 ; LEFT NUMBER
+MOV D, 49 ; RIGHT NUMBER
+
+MOV [A], C
+MOV [B], D
+
+increastRightOutput:
+MOV [B], D
+CMP D, 57
+JZ increaseLeftOutput
+CMP D, 50
+JZ checkIfLeftNumberIs4
+INC D
+JMP increastRightOutput
+
+increaseLeftOutput:
+MOV D, 48
+MOV [B], D
+CMP C, 0
+JZ resetLeftCounterTo1
+INC C
+MOV [A], C
+JMP increastRightOutput
+
+resetLeftCounterTo1:
+MOV C, 49
+MOV [A], C
+JMP increastRightOutput
+
+checkIfLeftNumberIs4:
+INC D
+CMP C, 52
+JNZ increastRightOutput
+HLT

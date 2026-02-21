@@ -1,0 +1,93 @@
+MOV D, 232
+JMP start
+
+fak: DB 6 ; the input number needed for factorial
+res: DB 0 ; the result will be stored here after the calculation
+err: DB "n! for n>5 not possible!" ; prints when the number is unable to be processed
+DB 0
+
+start:
+MOV A, [fak] ; check if number is less than 2
+CMP A, 2
+JB cancleLess
+
+MOV A, [fak] ; check if number bigger than 5
+CMP A, 5
+JA cancleBigger
+
+MOV B, [fak] ; else start the calculation Process
+SUB B, 1
+CALL calculateFactorial
+JMP startPrint
+
+calculateFactorial:
+CMP B, 0
+JZ fakdone
+MUL B
+SUB B, 1
+JMP calculateFactorial
+
+fakdone:
+MOV [res], A
+RET
+
+cancleBigger:
+MOV A, err
+MOV B, [A]
+JMP errorLoopPrint
+
+errorLoopPrint:
+MOV B, [A]
+CMP B, 0
+JZ done
+MOV [D], B
+INC A
+INC D
+JMP errorLoopPrint
+
+cancleLess:
+MOV A, 1
+MOV [res], A
+JMP startPrint
+
+startPrint:
+MOV C, [fak]
+ADD C, 48
+MOV [D], C
+INC D
+MOV [D], 33
+ADD D, 2
+MOV [D], 61
+ADD D, 2
+
+resultPrint: ; starts the resultPrintProcess using mod 10 and div
+MOV A, [res]
+CALL mod10
+PUSH A
+MOV A, [res]
+DIV 10
+MOV [res], A
+CMP A, 0
+JZ printStack
+JMP resultPrint
+
+mod10: ; acts like the modulo 10 function
+CMP A, 10
+JB modone
+SUB A, 10
+JMP mod10
+
+modone:
+RET
+
+printStack:
+CMP sp, 231
+JZ done
+POP A
+ADD A, 48
+MOV [D], A
+INC D
+JMP printStack
+
+done:
+HLT

@@ -1,0 +1,15 @@
+MOV B, 57 ; BEGIN
+MOV D, 47 ; END
+
+MOV C, 232 ; OUTPUT
+
+JMP loop
+
+loop: PUSH A
+MOV A, [B]
+MOV [C], B
+INC C
+DEC B
+CMP B, D
+JNZ loop
+HLT

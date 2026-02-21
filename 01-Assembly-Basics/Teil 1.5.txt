@@ -1,0 +1,41 @@
+JMP start
+
+btodnumber: DB 48 ; Decimal Number
+
+start:
+MOV A, 2
+PUSH A
+MOV A, [btodnumber] ; store the constant into the register A
+MOV C, 232 ; Output
+JMP calculate
+
+
+calculate:
+MOV B, A ; store register A into register B
+AND B, 1
+PUSH B
+DIV 2
+CMP A, 0
+JZ printStack
+JMP calculate
+
+printStack:
+POP D
+CMP D, 0
+JZ print0
+CMP D, 1
+JZ print1
+JMP finish
+
+print0:
+MOV [C], 48
+INC C
+JMP printStack
+
+print1:
+MOV [C], 49
+INC C
+JMP printStack
+
+finish:
+HLT

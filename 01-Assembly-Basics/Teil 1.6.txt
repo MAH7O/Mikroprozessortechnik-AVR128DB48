@@ -1,0 +1,117 @@
+JMP start
+
+fibo: DB 10
+FiboZahl: DB "FiboZahl"
+DB 0
+
+start:
+MOV A, [fibo]
+CMP A, 2
+JB cancle
+MOV A, 0
+MOV B, 1
+MOV D, [fibo]
+DEC D
+call calculateFibo
+JMP startPrint
+
+calculateFibo:
+ADD A, B
+MOV C, A
+MOV A, B
+MOV B, C
+DEC D
+CMP D, 0
+JNZ calculateFibo
+RET
+
+startPrint:
+MOV D, 232
+MOV A, [fibo]
+CMP A, 9
+JA bigPrint
+ADD A, 48
+MOV [D], A
+INC D
+
+continuePrint:
+MOV [D], 46
+INC D
+CALL printFiboZahlText
+MOV [D], 58
+INC D
+JMP resultPrint
+
+printFiboZahlText:
+MOV A, FiboZahl
+MOV B, [A]
+JMP FiboZahlLoop
+
+FiboZahlLoop:
+MOV B, [A]
+MOV [D], B
+INC A
+INC D
+MOV B, [A]
+CMP B, 0
+JNZ FiboZahlLoop
+RET
+
+bigPrint:
+MOV A, [fibo]
+CALL mod10
+PUSH A
+MOV A, [fibo]
+DIV 10
+MOV [fibo], A
+CMP A, 0
+JZ printStackForBigFib
+JMP bigPrint
+
+mod10: ; acts like the modulo 10 function
+CMP A, 10
+JB modone
+SUB A, 10
+JMP mod10
+
+modone:
+RET
+
+printStackForBigFib:
+CMP sp, 231
+JZ bigDone
+POP A
+ADD A, 48
+MOV [D], A
+INC D
+JMP printStackForBigFib
+
+bigDone:
+JMP continuePrint
+
+resultPrint: ; starts the resultPrintProcess using mod 10 and div
+MOV A, C
+CALL mod10
+PUSH A
+MOV A, C
+DIV 10
+MOV C, A
+CMP A, 0
+JZ printStack
+JMP resultPrint
+
+printStack:
+CMP sp, 231
+JZ done
+POP A
+ADD A, 48
+MOV [D], A
+INC D
+JMP printStack
+
+done:
+HLT
+
+cancle:
+MOV C, A
+JMP startPrint
